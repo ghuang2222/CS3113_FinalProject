@@ -13,7 +13,11 @@
 #include "ShaderProgram.h"
 #include "Entity.h"
 
-
+void Entity::update_icon(Entity* player)
+{
+    if (player->m_entity_type != PLAYER) return;
+    m_model_matrix = glm::translate(player->m_model_matrix, m_position);
+}
 
 void Entity::attack(Entity* other) {
     other->set_health(other->get_health() - m_damage);
@@ -511,7 +515,7 @@ void Entity::update(float delta_time, Entity* player, Entity* collidable_entitie
     //die if out of health
     if (m_health <= 0 && m_entity_type != BULLET) { deactivate(); }
     if (m_entity_type == ENEMY || m_entity_type == PLANT) ai_activate(player, delta_time);
-    
+    if (m_entity_type == ICON) { update_icon(player); return; }
    
     if (m_animation_indices != NULL)
     {
@@ -566,7 +570,7 @@ void Entity::update(float delta_time, Entity* player, std::vector<Entity*> colli
     //die if out of health
     if (m_health <= 0 && m_entity_type != BULLET) { deactivate(); }
     if (m_entity_type == ENEMY || m_entity_type == PLANT) ai_activate(player, delta_time);
-
+    if (m_entity_type == ICON) { update_icon(player); return; }
 
     if (m_animation_indices != NULL)
     {
@@ -598,10 +602,13 @@ void Entity::update(float delta_time, Entity* player, std::vector<Entity*> colli
         m_velocity.y += m_jumping_power;
     }
 
-    m_position.y += m_velocity.y * delta_time;
-
-    check_collision_y(collidable_entities, collidable_entity_count);
-    check_collision_y(map);
+   // m_position.y += m_velocity.y * delta_time;
+    if (m_entity_type == PLAYER)
+    {
+        check_collision_y(collidable_entities, collidable_entity_count);
+        check_collision_y(map);
+    }
+    
 
     m_position.x += m_velocity.x * delta_time;
     check_collision_x(collidable_entities, collidable_entity_count);

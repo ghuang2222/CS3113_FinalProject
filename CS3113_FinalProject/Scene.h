@@ -28,10 +28,13 @@ constexpr float PEASHOOTER_RECHARGE = 5.0f,
 
 constexpr char SPRITESHEET_FILEPATH[] = "assets/george_0.png",
 PEASHOOTER_FILEPATH[] = "assets/peashooter.png",
+SUNFLOWER_FILEPATH[] = "assets/sunflower.png",
+WALLNUT_FILEPATH[] = "assets/wallnut.png",
 ENEMY_FILEPATH[] = "assets/square.png",
-BULLET_FILEPATH[] = "assets/circle.png";
+BULLET_FILEPATH[] = "assets/circle.png",
+FONT_FILEPATH[] = "assets/font1.png";
 
-
+constexpr int UNIQUE_PLANTS = 3;
 /**
     Notice that the game's state is now part of the Scene class, not the main file.
 */
@@ -44,9 +47,10 @@ struct GameState
     std::vector<Entity*> non_enemies;
     std::unordered_map<float, bool> plant_map;
     Entity* enemies;
-
-
-   
+    Entity* icons;
+    bool win_game = false;
+    bool lose_game = false;
+    int enemies_killed = 0;
 
     // ————— AUDIO ————— //
     Mix_Music* bgm;
@@ -67,7 +71,7 @@ public:
     float m_peashooter_timer = 0.0f;
     float m_sunflower_timer = 0.0f;
     float m_wallnut_timer = 0.0f;
-    float m_sun = 200.0f;
+    float m_sun = 100.0f;
 
     // ————— METHODS ————— //
     virtual void initialise() = 0;
@@ -75,8 +79,12 @@ public:
     virtual void render(ShaderProgram* program) = 0;
 
     float hash_function(float x_coord, float y_coord);
-    void plant_it(GLuint texture_id, AIType ai_type, float x_coord, float y_coord);
+    bool plant_it(GLuint texture_id, AIType ai_type, 
+                  float x_coord, float y_coord,
+                  float min_x, float max_x, float min_y, float max_y);
     // ————— GETTERS ————— //
     GameState const get_state() const { return m_game_state; }
     int const get_number_of_enemies() const { return m_number_of_enemies; }
+    //SETTERS
+    void set_scene_id(int next_scene_id) { m_game_state.next_scene_id = next_scene_id; }
 };

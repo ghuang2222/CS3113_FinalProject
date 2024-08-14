@@ -6,8 +6,8 @@
 #include "ShaderProgram.h"
 #include <unordered_map>
 
-enum EntityType { PLATFORM, PLAYER, PLANT, ENEMY, BULLET };
-enum AIType { WALKER, GUARD, SHOOTER };
+enum EntityType { PLATFORM, PLAYER, PLANT, ENEMY, BULLET, ICON };
+enum AIType { WALKER, GUARD, SHOOTER, SUNFLOWER, WALLNUT };
 enum AIState { WALKING, IDLE, RELOADING, RESET, ATTACKING };
 
 
@@ -102,11 +102,9 @@ public:
     void ai_walk();
     void ai_guard(Entity* player);
     void ai_shooter(Entity* player, float delta_time);
-
     void attack(Entity* other);
-
-    void bullet_update();
-    void init_shooter(GLuint texture_id);
+    void update_icon(Entity* player);
+   
 
     void normalise_movement() { m_movement = glm::normalize(m_movement); }
 
