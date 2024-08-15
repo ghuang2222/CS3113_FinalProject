@@ -1,3 +1,12 @@
+/**
+* Author: Garvin Huang
+* Assignment: Plants vs Zombies Clone
+* Date due: 2024-08-15, 1:00pm
+* I pledge that I have completed this assignment without
+* collaborating with anyone else, in conformance with the
+* NYU School of Engineering Policies and Procedures on
+* Academic Misconduct.
+**/
 #define GL_SILENCE_DEPRECATION
 #define GL_GLEXT_PROTOTYPES 1
 #define FIXED_TIMESTEP 0.0166666f
@@ -24,6 +33,8 @@
 #include "Scene.h"
 #include "Menu.h"
 #include "LevelA.h"
+#include "LevelB.h"
+#include "LevelC.h"
 
 #include "Effects.h"
 
@@ -54,10 +65,11 @@ enum AppStatus { RUNNING, TERMINATED };
 Scene* g_current_scene;
 Menu* g_menu;
 LevelA* g_levelA;
-//LevelB* g_levelB;
+LevelB* g_levelB;
+LevelC* g_levelC;
 //
 //Effects* g_effects;
-Scene* g_levels[2];
+Scene* g_levels[4];
 
 SDL_Window* g_display_window;
 
@@ -103,7 +115,7 @@ void initialise()
 {
     
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    g_display_window = SDL_CreateWindow("Hello, Special Effects!",
+    g_display_window = SDL_CreateWindow("Plantz vs Sombiez",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH, WINDOW_HEIGHT,
         SDL_WINDOW_OPENGL);
@@ -134,11 +146,13 @@ void initialise()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     g_menu = new Menu();
     g_levelA = new LevelA();
-    //g_levelB = new LevelB();
+    g_levelB = new LevelB();
+    g_levelC = new LevelC();
 
     g_levels[0] = g_menu;
     g_levels[1] = g_levelA;
-
+    g_levels[2] = g_levelB;
+    g_levels[3] = g_levelC;
     // Start at menu
     switch_to_scene(g_levels[0]);
 
@@ -156,6 +170,7 @@ void process_input()
     // VERY IMPORTANT: If nothing is pressed, we don't want to go anywhere
     g_current_scene->get_state().player->set_movement(glm::vec3(0.0f));
     glm::vec3 player_pos = g_current_scene->get_state().player->get_position();
+    float player_pos_hash = g_current_scene->hash_function(round(player_pos.x), round(player_pos.y));
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -226,7 +241,6 @@ void process_input()
                     Mix_PlayChannel(-1, g_current_scene->get_state().jump_sfx, 0);
 
                 }
-
             default:    
                 break;
             }
@@ -328,7 +342,7 @@ int main(int argc, char* argv[])
     while (g_app_status == RUNNING)
     {
         process_input();
-        if (!g_current_scene->get_state().lose_game) update();
+        update();
 
         if (g_current_scene->get_state().next_scene_id >= 0) switch_to_scene(g_levels[g_current_scene->get_state().next_scene_id]);
 

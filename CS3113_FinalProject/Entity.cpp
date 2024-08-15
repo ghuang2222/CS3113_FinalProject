@@ -554,6 +554,7 @@ void Entity::update(float delta_time, Entity* player, Entity* collidable_entitie
 
     m_model_matrix = glm::mat4(1.0f);
     m_model_matrix = glm::translate(m_model_matrix, m_position);
+    m_model_matrix = glm::scale(m_model_matrix, m_scale);
 }
 
 //Vector overload
@@ -567,8 +568,8 @@ void Entity::update(float delta_time, Entity* player, std::vector<Entity*> colli
     m_collided_left = false;
     m_collided_right = false;
 
-    //die if out of health
-    if (m_health <= 0 && m_entity_type != BULLET) { deactivate(); }
+    
+    if (m_health <= 0 && m_entity_type != BULLET) { deactivate(); } //die if out of health
     if (m_entity_type == ENEMY || m_entity_type == PLANT) ai_activate(player, delta_time);
     if (m_entity_type == ICON) { update_icon(player); return; }
 
@@ -616,6 +617,7 @@ void Entity::update(float delta_time, Entity* player, std::vector<Entity*> colli
 
     m_model_matrix = glm::mat4(1.0f);
     m_model_matrix = glm::translate(m_model_matrix, m_position);
+    m_model_matrix = glm::scale(m_model_matrix, m_scale);
 }
 
 

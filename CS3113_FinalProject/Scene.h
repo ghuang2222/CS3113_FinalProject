@@ -17,21 +17,32 @@
 #include "Map.h"
 
 
+constexpr float PLAYER_HEALTH = 35.0f;
+
 constexpr float PEASHOOTER_COST = 100.0f,
                 SUNFLOWER_COST = 50.0f,
                 WALLNUT_COST = 50.0f;
 
-constexpr float PEASHOOTER_RECHARGE = 5.0f,
-                SUNFLOWER_RECHARGE = 2.0f,
+constexpr float PEASHOOTER_RECHARGE = 4.25f,
+                SUNFLOWER_RECHARGE = 1.25f,
                 WALLNUT_RECHARGE = 3.0f;
 
+constexpr float PEASHOOTER_HEALTH = 100.0f,
+                SUNFLOWER_HEALTH = 50.0f,
+                WALLNUT_HEALTH = 600.0f;
 
-constexpr char SPRITESHEET_FILEPATH[] = "assets/george_0.png",
+constexpr float PEASHOOTER_RANGE = 14.0f;
+
+constexpr float BULLET_DAMAGE = 12.0f;
+constexpr float SUN_PER_SEC = 50.0f / 6.0f; //rate at which sunflowers produce sun
+
+constexpr char SPRITESHEET_FILEPATH[] = "assets/player.png",
 PEASHOOTER_FILEPATH[] = "assets/peashooter.png",
 SUNFLOWER_FILEPATH[] = "assets/sunflower.png",
 WALLNUT_FILEPATH[] = "assets/wallnut.png",
-ENEMY_FILEPATH[] = "assets/square.png",
+ENEMY_FILEPATH[] = "assets/zombie.png",
 BULLET_FILEPATH[] = "assets/circle.png",
+HOUSE_FILEPATH[] = "assets/house.png",
 FONT_FILEPATH[] = "assets/font1.png";
 
 constexpr int UNIQUE_PLANTS = 3;
@@ -42,6 +53,7 @@ struct GameState
 {
     // ————— GAME OBJECTS ————— //
     Map* map;
+    Entity* house;
     Entity* player;
     Entity* bullets;
     std::vector<Entity*> non_enemies;
@@ -55,6 +67,8 @@ struct GameState
     // ————— AUDIO ————— //
     Mix_Music* bgm;
     Mix_Chunk* jump_sfx;
+    Mix_Chunk* lose_sfx;
+    Mix_Chunk* win_sfx;
 
     // ————— POINTERS TO OTHER SCENES ————— //
     int next_scene_id;
@@ -84,7 +98,9 @@ public:
                   float min_x, float max_x, float min_y, float max_y);
     // ————— GETTERS ————— //
     GameState const get_state() const { return m_game_state; }
+    
     int const get_number_of_enemies() const { return m_number_of_enemies; }
     //SETTERS
     void set_scene_id(int next_scene_id) { m_game_state.next_scene_id = next_scene_id; }
+    
 };

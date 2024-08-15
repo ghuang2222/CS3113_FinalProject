@@ -15,12 +15,26 @@ bool Scene::plant_it(GLuint texture_id, AIType ai_type, float x_coord,float y_co
     if (plant_x < min_x || plant_x > max_x || plant_y < min_y || plant_y > max_y) return false;
     float coord_hash = hash_function(plant_x, plant_y);
     //if there is already a plant here
-    if (m_game_state.plant_map.count(coord_hash) == 1 
-        || m_game_state.plant_map[coord_hash] == true) { return false; }
+    if ( m_game_state.plant_map[coord_hash] == true) { return false; }
     
-    m_game_state.plant_map[coord_hash] = true;
+    
     Entity* new_plant = new Entity(texture_id, 0.0f, 1.0f, 1.0f, PLANT, ai_type, IDLE);
     new_plant->set_position(glm::vec3(plant_x, plant_y, 0.0f));
+    switch (ai_type) 
+    {
+    case WALLNUT:
+        new_plant->set_health(WALLNUT_HEALTH);
+        break;
+    case SUNFLOWER:
+        new_plant->set_health(SUNFLOWER_HEALTH);
+        break;
+    case SHOOTER:
+        new_plant->set_health(PEASHOOTER_HEALTH);
+    default:
+        break;
+
+    }
+    m_game_state.plant_map[coord_hash] = true;
     m_game_state.non_enemies.push_back(new_plant);
     return true;
 

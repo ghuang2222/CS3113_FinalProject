@@ -26,6 +26,8 @@ void Menu::update(float delta_time){}
 
 void Menu::render(ShaderProgram* program)
 {   
-    Utility::draw_text(program, g_font_texture_id_menu, "Press ENTER",
-        0.25f, 0.05f, glm::vec3(-3.0f, 0.0f, 0.0f));
+    Utility::draw_text(program, g_font_texture_id_menu, "PLANTZ vs ZOMBIEZ",
+        0.5f, 0.025f, glm::vec3(-4.0f, 0.0f, 0.0f));
+    Utility::draw_text(program, g_font_texture_id_menu, "Press ENTER to begin",
+        0.25f, 0.05f, glm::vec3(-3.0f, -3.0f, 0.0f));
 }

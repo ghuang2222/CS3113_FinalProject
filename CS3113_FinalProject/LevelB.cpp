@@ -1,4 +1,4 @@
-#include "LevelA.h"
+#include "LevelB.h"
 #include "Utility.h"
 
 #define LOG(argument) std::cout << argument << '\n'
@@ -8,7 +8,7 @@
 // CONSTANTS
 constexpr int BULLET_COUNT = LEVEL_WIDTH * LEVEL_HEIGHT;
 
-unsigned int LEVELA_DATA[] =
+unsigned int LevelB_DATA[] =
 {
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
@@ -20,37 +20,34 @@ unsigned int LEVELA_DATA[] =
 };
 
 //VARIABLES
-unsigned int g_next_bullet = 0;
-GLuint g_font_texture_id;
+unsigned int g_next_bullet_levelb = 0;
+GLuint g_font_texture_id_levelb;
 
 
 
-LevelA::~LevelA()
+LevelB::~LevelB()
 {
     delete[] m_game_state.enemies;
     delete[] m_game_state.bullets;
     delete    m_game_state.player;
     delete    m_game_state.map;
-    delete[]    m_game_state.icons;
     delete m_game_state.house;
-    for (Entity* ptr : m_game_state.non_enemies) {delete ptr;}
+    delete[]    m_game_state.icons;
+    for (Entity* ptr : m_game_state.non_enemies) { delete ptr; }
     Mix_FreeChunk(m_game_state.jump_sfx);
     Mix_FreeChunk(m_game_state.lose_sfx);
     Mix_FreeChunk(m_game_state.win_sfx);
     Mix_FreeMusic(m_game_state.bgm);
 }
 
-void LevelA::initialise()
+void LevelB::initialise()
 {
-    
-    m_sun = 200.0f;
+    m_sun = 50.0f;
     m_game_state.next_scene_id = -1;
-
-   
     GLuint enemy_texture_id = Utility::load_texture(ENEMY_FILEPATH);
     GLuint map_texture_id = Utility::load_texture("assets/tileset2.png");
     //Map
-    m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELA_DATA, map_texture_id, 1.0f, 7, 7  );
+    m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LevelB_DATA, map_texture_id, 1.0f, 7, 7);
 
     //House setup
     GLuint house_texture_id = Utility::load_texture(HOUSE_FILEPATH);
@@ -58,8 +55,9 @@ void LevelA::initialise()
     m_game_state.house->set_texture_id(house_texture_id);
     m_game_state.house->set_position(glm::vec3(-3.8f, -2.0f, 0.0f));
     m_game_state.house->set_scale(glm::vec3(8.25f, 8.25f, 0.0f));
+
     //Player setup
-    int player_walking_animation[4][4] =
+     int player_walking_animation[4][4] =
     {
 
         { 8, 11, 13, 15 }, //left 
@@ -69,9 +67,9 @@ void LevelA::initialise()
     };
 
     glm::vec3 acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
-    
+
     GLuint player_texture_id = Utility::load_texture(SPRITESHEET_FILEPATH);
-    g_font_texture_id = Utility::load_texture(FONT_FILEPATH);
+    g_font_texture_id_levelb = Utility::load_texture(FONT_FILEPATH);
 
     m_game_state.player = new Entity(
         player_texture_id,         // texture id
@@ -84,15 +82,15 @@ void LevelA::initialise()
         0,                         // current animation index
         8,                         // animation column amount
         4,                         // animation row amount
-        0.6f,                      // width
-        1.0f,                       // height
+        1.0f,                      // width
+        0.6f,                       // height
         PLAYER
     );
 
     m_game_state.player->set_position(glm::vec3(5.0f, 0.0f, 0.0f));
     m_game_state.player->set_health(PLAYER_HEALTH);
     m_game_state.non_enemies.push_back(m_game_state.player);
-    
+
     //Bullet setup
     GLuint bullet_texture_id = Utility::load_texture(BULLET_FILEPATH);
     m_game_state.bullets = new Entity[BULLET_COUNT];
@@ -105,16 +103,16 @@ void LevelA::initialise()
         m_game_state.bullets[i].set_damage(BULLET_DAMAGE);
         m_game_state.non_enemies.push_back(&m_game_state.bullets[i]);
     }
-    
- 
-    
+
+
+
     //Plant setup
     GLuint peashooter_texture_id = Utility::load_texture(PEASHOOTER_FILEPATH);
     GLuint sunflower_texture_id = Utility::load_texture(SUNFLOWER_FILEPATH);
     GLuint wallnut_texture_id = Utility::load_texture(WALLNUT_FILEPATH);
-    
-    
-   
+
+
+
     // Enemy setup
 
     m_game_state.enemies = new Entity[ENEMY_COUNT];
@@ -122,14 +120,14 @@ void LevelA::initialise()
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
         m_game_state.enemies[i] = Entity(enemy_texture_id, 0.25f, 1.0f, 1.0f, ENEMY, WALKER, WALKING);
-        m_game_state.enemies[i].set_position(glm::vec3(14.0f,  -1.0f * i, 0.0f));
+        m_game_state.enemies[i].set_position(glm::vec3(14.0f, -1.0f * i, 0.0f));
         m_game_state.enemies[i].set_damage(0.5f);
         m_game_state.enemies[i].activate();
     }
 
     // UI setup
     m_game_state.icons = new Entity[UNIQUE_PLANTS];
-    m_game_state.icons[0] = Entity(sunflower_texture_id, 0.0f, 1.0f, 1.0f, ICON); 
+    m_game_state.icons[0] = Entity(sunflower_texture_id, 0.0f, 1.0f, 1.0f, ICON);
     m_game_state.icons[0].set_position(glm::vec3(-1.5f, -3.0f, 0.0f));
     m_game_state.icons[1] = Entity(peashooter_texture_id, 0.0f, 1.0f, 1.0f, ICON);
     m_game_state.icons[1].set_position(glm::vec3(0.0f, -3.0f, 0.0f));
@@ -145,15 +143,15 @@ void LevelA::initialise()
     Mix_PlayMusic(m_game_state.bgm, -1);
     Mix_VolumeMusic(MIX_MAX_VOLUME / 4.0f);
 
+  
     m_game_state.jump_sfx = Mix_LoadWAV("assets/click.wav");
     m_game_state.lose_sfx = Mix_LoadWAV("assets/Zombies Eat Brains.wav");
     m_game_state.win_sfx = Mix_LoadWAV("assets/Cheer.wav");
 }
 
-
-void LevelA::update(float delta_time)
+void LevelB::update(float delta_time)
 {
-    if (m_game_state.win_game) m_game_state.next_scene_id = 2; //level1  -> level2
+    if (m_game_state.win_game)  m_game_state.next_scene_id = 3; //level2  -> level3
     m_game_state.enemies_killed = 0; //reset for each count
     //passive sun
     m_sun += 0.5f * delta_time;
@@ -165,33 +163,32 @@ void LevelA::update(float delta_time)
     m_wallnut_timer -= delta_time;
     m_wallnut_timer *= m_wallnut_timer >= 0;
 
+    //house
     m_game_state.house->update(delta_time, m_game_state.player, nullptr, 0, nullptr);
     //player
     m_game_state.player->update(delta_time, m_game_state.player,
-                                m_game_state.enemies, 
-                                ENEMY_COUNT,
-                                nullptr);
-   
-    
+        m_game_state.enemies,
+        ENEMY_COUNT,
+        nullptr);
     //non enemies
     for (int i = 0; i < m_game_state.non_enemies.size(); ++i) {
         m_game_state.non_enemies[i]->update(delta_time, m_game_state.player,
-                       m_game_state.enemies, ENEMY_COUNT, nullptr);
-       
+            m_game_state.enemies, ENEMY_COUNT, nullptr);
+
         //acquire bullet if shooter doesn't have one
         if (m_game_state.non_enemies[i]->get_ai_type() == SHOOTER
             && m_game_state.non_enemies[i]->get_bullet() == nullptr)
         {
             m_game_state.non_enemies[i]->set_bullet(m_game_state.bullets,
-                g_next_bullet,
+                g_next_bullet_levelb,
                 BULLET_COUNT);
-            ++g_next_bullet;
-        }  
+            ++g_next_bullet_levelb;
+        }
         if (m_game_state.non_enemies[i]->get_entity_type() == PLANT
             && m_game_state.non_enemies[i]->get_health() <= 0)
         {
             float plant_x = m_game_state.non_enemies[i]->get_position().x,
-                  plant_y = m_game_state.non_enemies[i]->get_position().y;
+                plant_y = m_game_state.non_enemies[i]->get_position().y;
             float plant_hash = hash_function(plant_x, plant_y);
             m_game_state.plant_map[plant_hash] = false;
         }
@@ -202,15 +199,15 @@ void LevelA::update(float delta_time)
     {
         m_game_state.icons[i].update(delta_time, m_game_state.player, nullptr, 0, nullptr);
     }
-    
+
     //ENEMIES
-    for (int i = 0; i < ENEMY_COUNT; ++i) 
-    { 
-        m_game_state.enemies[i].update(delta_time, m_game_state.player, m_game_state.non_enemies, 
-                                       m_game_state.non_enemies.size(), nullptr);
+    for (int i = 0; i < ENEMY_COUNT; ++i)
+    {
+        m_game_state.enemies[i].update(delta_time, m_game_state.player, m_game_state.non_enemies,
+            m_game_state.non_enemies.size(), nullptr);
         // Lose condition
         if (m_game_state.enemies[i].get_position().x <= -1 || m_game_state.player->get_health() <= 0
-            &&  m_game_state.lose_game == false)
+            && m_game_state.lose_game == false)
         {
             m_game_state.lose_game = true;
             Mix_PlayChannel(-1, m_game_state.lose_sfx, 0);
@@ -219,26 +216,28 @@ void LevelA::update(float delta_time)
         }
         if (m_game_state.enemies[i].get_health() <= 0) { ++m_game_state.enemies_killed; }
     }
-    //win condition
-    if (m_game_state.enemies_killed == ENEMY_COUNT && m_game_state.win_game == false ) 
-    { 
-        m_game_state.win_game = true; 
+
+    if (m_game_state.enemies_killed == ENEMY_COUNT && m_game_state.win_game == false)
+    {
+        m_game_state.win_game = true;
         Mix_PlayChannel(-1, m_game_state.win_sfx, 0);
     }
 }
 
-void LevelA::render(ShaderProgram* program)
+void LevelB::render(ShaderProgram* program)
 {
     m_game_state.map->render(program);
     
-    Utility::draw_text(program, g_font_texture_id,
+    Utility::draw_text(program, g_font_texture_id_levelb,
         std::to_string((int)m_sun), 0.25f, 0.05f,
         glm::vec3(m_game_state.player->get_position().x,
             m_game_state.player->get_position().y + 0.5f, 0.0f));
-    
-    for (int i = 0; i < m_game_state.non_enemies.size(); ++i) 
-    { m_game_state.non_enemies[i]->render(program); }
-    
+
+    for (int i = 0; i < m_game_state.non_enemies.size(); ++i)
+    {
+        m_game_state.non_enemies[i]->render(program);
+    }
+
     for (int i = 0; i < ENEMY_COUNT; ++i) { m_game_state.enemies[i].render(program); }
     m_game_state.house->render(program);
     m_game_state.player->render(program);
@@ -248,24 +247,21 @@ void LevelA::render(ShaderProgram* program)
 
     if (m_game_state.lose_game)
     {
-        Utility::draw_text(program, g_font_texture_id,
+        Utility::draw_text(program, g_font_texture_id_levelb,
             "YOU LOSE!", 0.5f, 0.05f,
             glm::vec3(m_game_state.player->get_position().x - 2.0f,
                 m_game_state.player->get_position().y + 0.5f, 0.0f));
     }
     else if (m_game_state.win_game)
     {
-        Utility::draw_text(program, g_font_texture_id,
+        Utility::draw_text(program, g_font_texture_id_levelb,
             "YOU WIN!", 0.5f, 0.05f,
             glm::vec3(m_game_state.player->get_position().x - 2.0f,
                 m_game_state.player->get_position().y + 0.5f, 0.0f));
-        
+
     }
-   
-    Utility::draw_text(program, g_font_texture_id,
-        "LEVEL 1", 0.35f, 0.05f,
+    Utility::draw_text(program, g_font_texture_id_levelb,
+        "LEVEL 2", 0.35f, 0.05f,
         glm::vec3(m_game_state.player->get_position().x - 2.0f,
             m_game_state.player->get_position().y + 2.5f, 0.0f));
-
-
 }
