@@ -1,3 +1,23 @@
-﻿  Menu.cpp
+﻿  LevelA.cpp
 C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\Scene.h(102,54): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelA.cpp(146,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelA.cpp(177,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelA.cpp(239,23): warning C4018: '<': signed/unsigned mismatch
+  LevelB.cpp
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\Scene.h(102,54): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelB.cpp(144,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelB.cpp(174,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelB.cpp(236,23): warning C4018: '<': signed/unsigned mismatch
+  LevelC.cpp
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\Scene.h(102,54): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelC.cpp(143,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelC.cpp(172,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\LevelC.cpp(234,23): warning C4018: '<': signed/unsigned mismatch
+  Menu.cpp
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\Scene.h(102,54): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+  Scene.cpp
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\Scene.h(102,54): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+  main.cpp
+C:\Users\jlao\source\repos\CS3113_FinalProject\CS3113_FinalProject\Scene.h(102,54): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+  Generating Code...
   CS3113_FinalProject.vcxproj -> C:\Users\jlao\source\repos\CS3113_FinalProject\Debug\CS3113_FinalProject.exe

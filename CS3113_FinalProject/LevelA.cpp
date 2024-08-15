@@ -240,7 +240,7 @@ void LevelA::render(ShaderProgram* program)
     { m_game_state.non_enemies[i]->render(program); }
     
     for (int i = 0; i < ENEMY_COUNT; ++i) { m_game_state.enemies[i].render(program); }
-    m_game_state.house->render(program);
+
     m_game_state.player->render(program);
     if (m_sunflower_timer == 0) m_game_state.icons[0].render(program);
     if (m_peashooter_timer == 0) m_game_state.icons[1].render(program);
